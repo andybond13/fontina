@@ -25,7 +25,6 @@ class Trip:
 		out = [miles,gallons,days,octane,snowtires,make,model,year,engineIV,enginecyl,engineL,ethanol,driver,beginmileage]
 		return out
 
-def check():
 def dateMaker(date):
 	start = 0
 	while date.find("/",start) > -1:
@@ -37,14 +36,31 @@ def dateMaker(date):
 		if (year <= 50):
 			year = 2000 + int(year)
 	return date[0:start] + str(year)
+
+def check(fill,gastype,driver,snowtires,ethanol,hybrid):
+	assert(fill == 0 or fill == 1)
+	assert(gastype == 1 or gastype == 2 or gastype == 3)
+	assert(driver == "Andy" or driver == "Mark" or driver == "Mary" or driver == "Jeff")
+	assert(snowtires == 0 or snowtires == 1)
+	assert(ethanol == 0 or ethanol == 1)
+	assert(hybrid == 0 or hybrid == 1)
 	#price
 	#mpg
 	#miles
 	#date
-	print "ok"
+	#drivers
+	#snowtires
+	#ethanol
+	#
+	#print "ok"
+
+def checkTrip(time, miles):
+	assert(time > 0)
+	assert(miles > 0)
 
 def main(dir,outfile):
 
+	trips = []
 
 	for file in os.listdir(dir):
 
