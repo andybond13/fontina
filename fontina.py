@@ -56,9 +56,11 @@ def check(fill,gastype,driver,snowtires,ethanol,hybrid):
 	#
 	#print "ok"
 
-def checkTrip(time, miles):
-	assert(time > 0)
-	assert(miles > 0)
+def checkTrip(a):
+	assert(a.time > 0)
+	assert(a.miles > 0)
+	assert(a.dollars > 0)
+	assert(a.gallons > 0)
 
 def main(dir,outfile):
 
@@ -104,30 +106,57 @@ def main(dir,outfile):
 				#begin trip
 				beginMiles = odometer
 				beginDate = date
+				tripDollars = 0
+				tripGallons = 0
 			else:
 				#check and add to trip
+				tripDollars += dollars
+				tripGallons += gallons
 				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
 				
 			if (fill == 1):
+				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
+
 				#end trip
 				tripMiles = odometer - beginMiles
 				beginMiles = odometer
 				dateobj1 = datetime.datetime.strptime(beginDate,'%m/%d/%Y').date()
 				dateobj2 = datetime.datetime.strptime(date,'%m/%d/%Y').date()
 				tripDate = dateobj2 - dateobj1
+				tripDays = tripDate.days
 
-				if (tripDate == 0):
-					tripDate += 1
-				beginDate = date
+				if (tripDays == 0):
+					tripDays += 1
 
-				#check trip
-				checkTrip(tripDate.days, tripMiles)
+				tripDollars += dollars
+				tripGallons += gallons
 
 				#make trip opject
+				a = Trip()
+				a.miles = tripMiles
+				a.gallons = tripGallons
+				a.dollars = tripDollars
+				a.time = tripDays
+				print date, tripDollars, tripGallons, tripMiles, tripDays, tripMiles/tripGallons
+
+				#check and save trip
+				checkTrip(a)
+				trips.append(a)
+
+				#reset dollars and gallons
+				tripDollars = 0
+				tripGallons = 0
+				beginDate = date
+
 								
 	
 	fo = open(outfile,'wb')	
+
 	#print trips
+#	for thisTrip in trips:
+		#print thisTrip.miles/thisTrip.gallons
+
+
 
 
 dir = './raw/'
