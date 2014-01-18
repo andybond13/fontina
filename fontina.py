@@ -25,15 +25,17 @@ class Trip:
 		out = [miles,gallons,days,octane,snowtires,make,model,year,engineIV,enginecyl,engineL,ethanol,driver,beginmileage]
 		return out
 
+
+
 def dateMaker(date):
 	start = 0
 	while date.find("/",start) > -1:
 		start = date.find("/",start) + 1
 	year = date[start:]
 	if len(year) == 2:
-		if (year > 50):
+		if (int(year) > 50):
 			year = 1900 + int(year)
-		if (year <= 50):
+		if (int(year) <= 50):
 			year = 2000 + int(year)
 	return date[0:start] + str(year)
 
