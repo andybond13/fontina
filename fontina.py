@@ -21,8 +21,8 @@ class Trip:
 	avgMileage	= 0
 	avgDate		= 0
 		
-	def write():
-		out = [miles,gallons,days,octane,snowtires,make,model,year,engineIV,enginecyl,engineL,ethanol,driver,beginmileage]
+	def write(self):
+		out = [self.miles,self.gallons,self.days,self.octane,self.snowtires,self.make,self.model,self.year,self.engineIV,self.enginecyl,self.engineL,self.ethanol,self.driver,self.avgMileage]
 		return out
 
 
@@ -115,11 +115,9 @@ def main(dir,outfile):
 				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
 				
 			if (fill == 1):
-				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
 
 				#end trip
 				tripMiles = odometer - beginMiles
-				beginMiles = odometer
 				dateobj1 = datetime.datetime.strptime(beginDate,'%m/%d/%Y').date()
 				dateobj2 = datetime.datetime.strptime(date,'%m/%d/%Y').date()
 				tripDate = dateobj2 - dateobj1
@@ -128,17 +126,13 @@ def main(dir,outfile):
 				if (tripDays == 0):
 					tripDays += 1
 
-				tripDollars += dollars
-				tripGallons += gallons
-
 				#make trip opject
 				a = Trip()
 				a.miles = tripMiles
 				a.gallons = tripGallons
 				a.dollars = tripDollars
 				a.time = tripDays
-				print date, tripDollars, tripGallons, tripMiles, tripDays, tripMiles/tripGallons
-
+				
 				#check and save trip
 				checkTrip(a)
 				trips.append(a)
@@ -147,16 +141,17 @@ def main(dir,outfile):
 				tripDollars = 0
 				tripGallons = 0
 				beginDate = date
+				beginMiles = odometer
 
 								
 	
 	fo = open(outfile,'wb')	
+	datareader = csv.writer(fo, dialect = csv.excel_tab)
 
 	#print trips
-#	for thisTrip in trips:
-		#print thisTrip.miles/thisTrip.gallons
-
-
+	for thisTrip in trips:
+		out = thisTrip.write()
+		datareader.writerow(out)
 
 
 dir = './raw/'
