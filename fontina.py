@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import csv
+import datetime
 import os
 
 class Trip:
@@ -25,6 +26,17 @@ class Trip:
 		return out
 
 def check():
+def dateMaker(date):
+	start = 0
+	while date.find("/",start) > -1:
+		start = date.find("/",start) + 1
+	year = date[start:]
+	if len(year) == 2:
+		if (year > 50):
+			year = 1900 + int(year)
+		if (year <= 50):
+			year = 2000 + int(year)
+	return date[0:start] + str(year)
 	#price
 	#mpg
 	#miles
@@ -33,7 +45,6 @@ def check():
 
 def main(dir,outfile):
 
-	fo = open(outfile,'wb')
 
 	for file in os.listdir(dir):
 
@@ -45,14 +56,16 @@ def main(dir,outfile):
 		datareader = csv.reader(f, dialect = csv.excel_tab)
 		lineNum = 0
 		
+		beginMiles = 0
+		beginDate = 0
+		
 		for row in datareader:
 			lineNum += 1
-			if (lineNum == 1):
-				continue
 			line = str(row)
 			line = line[2:-2].split(',')
-			print row
-			date = str(line[0])
+			if (line[0] == "Date"):
+				continue
+			date = dateMaker(str(line[0]))
 			odometer = int(line[1])
 			fill = int(line[2])
 			gastype = int(line[3])
@@ -67,8 +80,36 @@ def main(dir,outfile):
 			engineL = float(line[12])
 			enginecyl = int(line[13])
 			engineIV = int(line[14])
-			hybrid = int(line[15])	
-			print line	
+			hybrid = int(line[15])
+
+			if (fill == -1):
+				#begin trip
+				beginMiles = odometer
+				beginDate = date
+			else:
+				#check and add to trip
+				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
+				
+			if (fill == 1):
+				#end trip
+				tripMiles = odometer - beginMiles
+				beginMiles = odometer
+				dateobj1 = datetime.datetime.strptime(beginDate,'%m/%d/%Y').date()
+				dateobj2 = datetime.datetime.strptime(date,'%m/%d/%Y').date()
+				tripDate = dateobj2 - dateobj1
+
+				if (tripDate == 0):
+					tripDate += 1
+				beginDate = date
+
+				#check trip
+				checkTrip(tripDate.days, tripMiles)
+
+				#make trip opject
+								
+	
+	fo = open(outfile,'wb')	
+	#print trips
 
 
 dir = './raw/'
