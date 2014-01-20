@@ -51,7 +51,7 @@ class Trip:
 		self.enginecyl	= 0
 		self.engineL		= 0
 		self.ethanol		= 0
-		self.driver		= 0
+		self.driver		= ""
 		self.avgMileage	= 0
 		self.avgDate		= 0
 
@@ -73,6 +73,18 @@ def octaneCode(inOct):
 	else:
 		print "Unknown octane code"
 		assert(1 == 0)
+
+def driverCode(driver):
+	if (driver == "Mark"):
+		return 0
+	elif (driver == "Mary"):
+		return 1
+	elif (driver == "Andy"):
+		return 2
+	elif (driver == "Jeff"):
+		return 3
+	else:
+		print "Unknown driver"
 
 def dateMaker(date):
 	start = 0
@@ -108,6 +120,7 @@ def checkTrip(a):
 	a.dollars = sum(a.dols)
 	a.gallons = sum(a.gals)
 	a.octane = wavg(a.octs,a.gals)
+	a.driver = sorted(a.drivers)[len(a.drivers)/2]
 	assert(a.days > 0)
 	assert(a.miles > 0)
 	assert(a.dollars > 0)
@@ -165,7 +178,7 @@ def main(dir,outfile):
 				a.gals.append(gallons)
 				a.dists.append(odometer - beginMiles)
 				a.octs.append(octaneCode(gastype))
-				a.drivers.append(driver)
+				a.drivers.append(driverCode(driver))
 				a.tires.append(snowtires)
 				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
 				beginMiles = odometer
