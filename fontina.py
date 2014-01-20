@@ -59,9 +59,20 @@ class Trip:
 def wavg(series, weight):
 	avg = 0
 	assert(len(series) == len(weight))
-	for i in [0]:#range(len(weight)):
+	for i in range(len(weight)):
 		avg += series[i] * weight[i] / sum(weight)
 	return avg
+
+def octaneCode(inOct):
+	if (inOct == 1):
+		return 87;
+	elif (inOct == 2):
+		return 89;
+	elif (inOct == 3):
+		return 93;
+	else:
+		print "Unknown octane code"
+		assert(1 == 0)
 
 def dateMaker(date):
 	start = 0
@@ -152,8 +163,8 @@ def main(dir,outfile):
 				#check and add to trip
 				a.dols.append(dollars)
 				a.gals.append(gallons)
-				a.octs.append(gastype)
 				a.dists.append(odometer - beginMiles)
+				a.octs.append(octaneCode(gastype))
 				a.drivers.append(driver)
 				a.tires.append(snowtires)
 				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
