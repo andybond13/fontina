@@ -71,7 +71,7 @@ def octaneCode(inOct):
 	elif (inOct == 3):
 		return 93;
 	else:
-		print "Unknown octane code"
+		print "Unknown octane code", inOct
 		assert(1 == 0)
 
 def driverCode(driver):
@@ -84,7 +84,53 @@ def driverCode(driver):
 	elif (driver == "Jeff"):
 		return 3
 	else:
-		print "Unknown driver"
+		print "Unknown driver: ", driver
+		assert(1 == 0)
+
+def makeCode(make):
+	if (make == "Chevrolet"):
+		return 0
+	elif (make == "Buick"):
+		return 1
+	elif (make == "Oldsmobile"):
+		return 2
+	elif (make == "Mercury"):
+		return 3
+	elif (make == "Plymouth"):
+		return 4
+	elif (make == "Volkswagen"):
+		return 5
+	elif (make == "Toyota"):
+		return 6
+	elif (make == "Honda"):
+		return 7
+	else:
+		print "Unknown make: ", make
+		assert(1 == 0)
+
+
+def modelCode(model):
+	if (model == "Concourse"):
+		return 0
+	elif (model == "Vega"):
+		return 1
+	elif (model == "Century"):
+		return 2
+	elif (model == "Cierra"):
+		return 3
+	elif (model == "Sable"):
+		return 4
+	elif (model == "Voyager"):
+		return 5
+	elif (model == "Highlander"):
+		return 6
+	elif (model == "CRV"):
+		return 7
+	elif (model == "Jetta"):
+		return 8
+	else:
+		print "Unknown model: ", model
+		assert(1 == 0)
 
 def dateMaker(date):
 	start = 0
@@ -196,8 +242,8 @@ def main(dir,outfile):
 					tripDays += 1
 
 				a.days = tripDays
-				a.make		= make
-				a.model		= model
+				a.make		= makeCode(make)
+				a.model		= modelCode(model)
 				a.year		= year
 				a.engineIV	= engineIV
 				a.enginecyl	= enginecyl
