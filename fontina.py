@@ -108,7 +108,7 @@ def checkTrip(a):
 	a.dollars = sum(a.dols)
 	a.gallons = sum(a.gals)
 	a.octane = wavg(a.octs,a.gals)
-	assert(a.time > 0)
+	assert(a.days > 0)
 	assert(a.miles > 0)
 	assert(a.dollars > 0)
 	assert(a.gallons > 0)
@@ -182,7 +182,7 @@ def main(dir,outfile):
 				if (tripDays == 0):
 					tripDays += 1
 
-				a.time = tripDays
+				a.days = tripDays
 				a.make		= make
 				a.model		= model
 				a.year		= year
