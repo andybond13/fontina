@@ -29,7 +29,7 @@ class Trip:
 	avgDate		= 0
 		
 	def write(self):
-		out = [self.miles,self.gallons,self.days,self.octane,self.snowtires,self.make,self.model,self.year,self.engineIV,self.enginecyl,self.engineL,self.ethanol,self.driver,self.avgMileage]
+		out = [self.miles,self.gallons,self.dollars,self.days,self.octane,self.snowtires,self.make,self.model,self.year,self.engineIV,self.enginecyl,self.engineL,self.ethanol,self.driver,self.avgMileage]
 		return out
 	
 	def clear(self):
