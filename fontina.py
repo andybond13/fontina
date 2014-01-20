@@ -152,11 +152,12 @@ def main(dir,outfile):
 				#check and add to trip
 				a.dols.append(dollars)
 				a.gals.append(gallons)
-				a.dists.append(dollars)
 				a.octs.append(gastype)
+				a.dists.append(odometer - beginMiles)
 				a.drivers.append(driver)
 				a.tires.append(snowtires)
 				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
+				beginMiles = odometer
 				
 			if (fill == 1):
 
