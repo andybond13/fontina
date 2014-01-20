@@ -3,8 +3,15 @@
 import csv
 import datetime
 import os
+import copy
 
 class Trip:
+	dols = []
+	dists = []
+	gals = []
+	octs = []
+	drivers = []
+	tires = []
 	miles		= 0
 	gallons		= 0
 	days		= 0
@@ -24,8 +31,37 @@ class Trip:
 	def write(self):
 		out = [self.miles,self.gallons,self.days,self.octane,self.snowtires,self.make,self.model,self.year,self.engineIV,self.enginecyl,self.engineL,self.ethanol,self.driver,self.avgMileage]
 		return out
+	
+	def clear(self):
+		self.dols[:] = []
+		self.dists[:] = []
+		self.gals[:] = []
+		self.octs[:] = []
+		self.drivers[:] = []
+		self.tires[:] = []
+		self.miles		= 0
+		self.gallons		= 0
+		self.days		= 0
+		self.octane		= 0
+		self.snowtires	= 0
+		self.make		= 0
+		self.model		= 0
+		self.year		= 0
+		self.engineIV	= 0
+		self.enginecyl	= 0
+		self.engineL		= 0
+		self.ethanol		= 0
+		self.driver		= 0
+		self.avgMileage	= 0
+		self.avgDate		= 0
 
 
+def wavg(series, weight):
+	avg = 0
+	assert(len(series) == len(weight))
+	for i in [0]:#range(len(weight)):
+		avg += series[i] * weight[i] / sum(weight)
+	return avg
 
 def dateMaker(date):
 	start = 0
@@ -57,6 +93,10 @@ def check(fill,gastype,driver,snowtires,ethanol,hybrid):
 	#print "ok"
 
 def checkTrip(a):
+	a.miles = sum(a.dists)
+	a.dollars = sum(a.dols)
+	a.gallons = sum(a.gals)
+	a.octane = wavg(a.octs,a.gals)
 	assert(a.time > 0)
 	assert(a.miles > 0)
 	assert(a.dollars > 0)
@@ -104,14 +144,18 @@ def main(dir,outfile):
 
 			if (fill == -1):
 				#begin trip
+				#make trip opject
+				a = Trip()
 				beginMiles = odometer
 				beginDate = date
-				tripDollars = 0
-				tripGallons = 0
 			else:
 				#check and add to trip
-				tripDollars += dollars
-				tripGallons += gallons
+				a.dols.append(dollars)
+				a.gals.append(gallons)
+				a.dists.append(dollars)
+				a.octs.append(gastype)
+				a.drivers.append(driver)
+				a.tires.append(snowtires)
 				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
 				
 			if (fill == 1):
@@ -126,27 +170,27 @@ def main(dir,outfile):
 				if (tripDays == 0):
 					tripDays += 1
 
-				#make trip opject
-				a = Trip()
-				a.miles = tripMiles
-				a.gallons = tripGallons
-				a.dollars = tripDollars
 				a.time = tripDays
+				a.make		= make
+				a.model		= model
+				a.year		= year
+				a.engineIV	= engineIV
+				a.enginecyl	= enginecyl
+				a.engineL		= engineL
+				a.ethanol		= ethanol
 				
 				#check and save trip
 				checkTrip(a)
-				trips.append(a)
+				trips.append(copy.deepcopy(a))
 
 				#reset dollars and gallons
-				tripDollars = 0
-				tripGallons = 0
+				#make trip opject
+				a.clear()
 				beginDate = date
 				beginMiles = odometer
 
-								
-	
 	fo = open(outfile,'wb')	
-	datareader = csv.writer(fo, dialect = csv.excel_tab)
+	datareader = csv.writer(fo, delimiter=',')
 
 	#print trips
 	for thisTrip in trips:
