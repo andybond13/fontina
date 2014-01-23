@@ -14,6 +14,7 @@ class Trip:
 	tires = []
 	miles		= 0
 	gallons		= 0
+	actualGals = 0
 	days		= 0
 	octane		= 0
 	snowtires	= 0
@@ -26,10 +27,11 @@ class Trip:
 	ethanol		= 0
 	driver		= 0
 	avgMileage	= 0
-	avgDate		= 0
+	beginDate		= 0
+    
 		
 	def write(self):
-		out = [self.miles,self.gallons,self.dollars,self.days,self.octane,self.snowtires,self.make,self.model,self.year,self.engineIV,self.enginecyl,self.engineL,self.ethanol,self.driver,self.avgMileage]
+		out = [self.miles,self.gallons,self.actualGals,self.dollars,self.days,self.octane,self.snowtires,self.make,self.model,self.year,self.engineIV,self.enginecyl,self.engineL,self.ethanol,self.driver,self.avgMileage,self.beginDate]
 		return out
 	
 	def clear(self):
@@ -41,6 +43,7 @@ class Trip:
 		self.tires[:] = []
 		self.miles		= 0
 		self.gallons		= 0
+		self.actualGals = 0
 		self.days		= 0
 		self.octane		= 0
 		self.snowtires	= 0
@@ -53,11 +56,15 @@ class Trip:
 		self.ethanol		= 0
 		self.driver		= ""
 		self.avgMileage	= 0
-		self.avgDate		= 0
+		self.beginDate		= 0
 
 
 def wavg(series, weight):
 	avg = 0
+	print series,weight
+	if (weight[0] <= 0):
+		weight = weight[1:]
+	print series, weight
 	assert(len(series) == len(weight))
 	for i in range(len(weight)):
 		avg += series[i] * weight[i] / sum(weight)
@@ -151,26 +158,33 @@ def check(fill,gastype,driver,snowtires,ethanol,hybrid):
 	assert(snowtires == 0 or snowtires == 1)
 	assert(ethanol == 0 or ethanol == 1)
 	assert(hybrid == 0 or hybrid == 1)
-	#price
-	#mpg
-	#miles
-	#date
-	#drivers
-	#snowtires
 	#ethanol
-	#
-	#print "ok"
 
 def checkTrip(a):
 	a.miles = sum(a.dists)
 	a.dollars = sum(a.dols)
+	a.actualGals = sum(i for i in a.gals if i > 0) 
 	a.gallons = sum(a.gals)
 	a.octane = wavg(a.octs,a.gals)
+	a.snowtires = wavg(a.tires,a.dists)
 	a.driver = sorted(a.drivers)[len(a.drivers)/2]
+	print a.beginDate
+	assert(min(a.dists) > 0)
+	assert(min(a.dols) > 0)
 	assert(a.days > 0)
 	assert(a.miles > 0)
 	assert(a.dollars > 0)
 	assert(a.gallons > 0)
+
+def checkInterTrip(a,b):
+    print a.beginDate
+    print "mpg:   ", a.miles/a.gallons, b.miles/b.gallons
+    print "price: ", a.dollars/a.actualGals, b.dollars/b.actualGals
+    if(abs((a.miles/a.gallons)/(b.miles/b.gallons) - 1) > 0.5):
+        status = raw_input("Press Enter to continue... (mpg)")
+    if(abs((a.dollars/a.actualGals)/(b.dollars/b.actualGals) - 1) > 0.2):
+        status = raw_input("Press Enter to continue... (price)")
+    print ""
 
 def main(dir,outfile):
 
@@ -218,6 +232,7 @@ def main(dir,outfile):
 				a = Trip()
 				beginMiles = odometer
 				beginDate = date
+				a.gals.append(gallons)
 			else:
 				#check and add to trip
 				a.dols.append(dollars)
@@ -249,9 +264,12 @@ def main(dir,outfile):
 				a.enginecyl	= enginecyl
 				a.engineL		= engineL
 				a.ethanol		= ethanol
+				a.beginDate = beginDate
 				
 				#check and save trip
 				checkTrip(a)
+				if (len(trips) > 0):
+					checkInterTrip(a,trips[-1])
 				trips.append(copy.deepcopy(a))
 
 				#reset dollars and gallons
