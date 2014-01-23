@@ -61,13 +61,11 @@ class Trip:
 
 def wavg(series, weight):
 	avg = 0
-	print series,weight
 	if (weight[0] <= 0):
 		weight = weight[1:]
-	print series, weight
 	assert(len(series) == len(weight))
 	for i in range(len(weight)):
-		avg += series[i] * weight[i] / sum(weight)
+		avg +=  float(series[i])*float(weight[i])/float(sum(weight))
 	return avg
 
 def octaneCode(inOct):
