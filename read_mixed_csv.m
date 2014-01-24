@@ -1,5 +1,4 @@
-% 
-read input csv to matrix of cells
+% read input csv to matrix of cells
 % http://stackoverflow.com/questions/4747834/matlab-import-csv-file-with-mixed-data-types
 function lineArray = read_mixed_csv(fileName,delimiter)
   fid = fopen(fileName,'r');   %# Open the file
