@@ -46,3 +46,9 @@ fprintf(' done\n');
 kgroup = kmeans(data,1);
 andrewsplot(data,'group',kgroup)
 
+% neural network model
+inputs = [mpd,season,date,odo,gals,dol,trip,price];
+n_nodes = 12;
+targets = mpg;
+nnscript;
+
