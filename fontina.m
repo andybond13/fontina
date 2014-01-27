@@ -1,6 +1,7 @@
 %fontina-matlab interpreter
 clear all;
 close all;
+clc;
 
 % format:
 % [miles,gallons,actualGals,dollars,days,octane,snowtires,make,model,...
@@ -34,10 +35,43 @@ fprintf(' done\n');
 mpg = miles ./ gallons;
 price = dollars ./ actualGals;
 mpd = miles ./ days;
+carweight = ones(size(driver));  %curb weight, lbs
+for i=1:length(driver)
+    switch model(i)
+        case 8
+            carweight(i) = 3230;
+        case 7
+            carweight(i) = 3126;
+        case 6
+            if (year(i) == 2003)
+                carweight(i) = 3880;
+            elseif (year(i) == 2008)
+                carweight(i) = 4508;
+            end
+        case 5
+            carweight(i) = 3528;
+        case 4
+            carweight(i) = 3119;
+        case 3
+            carweight(i) = 2764;
+        case 2
+            if (year(i) == 1990)
+                carweight(i) = 2769;
+            elseif (year(i) == 1985)
+                carweight(i) = 2850;
+            end
+        case 1
+            carweight(i) = 2270;
+        case 0
+            carweight(i) = 3424;
+    end
+    assert(carweight(i) ~= 0);
+end
+
 % data = [days log(mpd) octane snowtires make model year engineIV enginecyl engineL ethanol...
 %     (driver == 1) (driver == 2) (driver == 3)]; %this with trainbr; 50=3.01, 25=3.16, 12=2.89
-data = [days log(mpd) octane snowtires year engineIV enginecyl engineL ethanol...
-    (driver == 1) (driver == 2) (driver == 3)]; %this with trainbr; 50=2.98, 25=2.91, 12=2.71
+data = [days log(mpd) octane snowtires year log(carweight) engineIV enginecyl engineL ...
+    ethanol (driver == 1) (driver == 2) (driver == 3)]; %this with trainbr; 50=2.98, 25=2.91, 12=2.71
 %trainlm: 12=3.2557, 25=3.1479, 50=3.1582, 100=2.9688, 200=4.4763
 %trainscg
 %trainrp
