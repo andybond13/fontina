@@ -28,10 +28,11 @@ class Trip:
 	driver		= 0
 	avgMileage	= 0
 	beginDate		= 0
+	hybrid = 0
     
 		
 	def write(self):
-		out = [self.miles,self.gallons,self.actualGals,self.dollars,self.days,self.octane,self.snowtires,self.make,self.model,self.year,self.engineIV,self.enginecyl,self.engineL,self.ethanol,self.driver,self.avgMileage,self.beginDate]
+		out = [self.miles,self.gallons,self.actualGals,self.dollars,self.days,self.octane,self.snowtires,self.make,self.model,self.year,self.engineIV,self.enginecyl,self.engineL,self.ethanol,self.driver,self.avgMileage,self.beginDate,self.hybrid]
 		return out
 	
 	def clear(self):
@@ -57,6 +58,7 @@ class Trip:
 		self.driver		= ""
 		self.avgMileage	= 0
 		self.beginDate		= 0
+		self.hybrid     = 0
 
 
 def wavg(series, weight):
@@ -263,6 +265,7 @@ def main(dir,outfile):
 				a.engineL		= engineL
 				a.ethanol		= ethanol
 				a.beginDate = beginDate
+				a.hybrid = hybrid
 				
 				#check and save trip
 				checkTrip(a)
