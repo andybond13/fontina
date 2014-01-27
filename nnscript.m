@@ -26,13 +26,15 @@ net.TrainFcn = 'trainbr';
 
 
 % Train the Network
-[net,tr] = train(net,inputs,targets);
+for i=1:n_times
+    [net,tr] = train(net,inputs,targets);
+end
 
 % Test the Network
 outputs = net(inputs);
 % outputs = mapminmax('reverse',outputs1,TS);
 errors = gsubtract(targets,outputs);
-performance = perform(net,targets,outputs)
+performance = perform(net,targets,outputs);
 
 % View the Network
 %view(net)

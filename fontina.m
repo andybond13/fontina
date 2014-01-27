@@ -116,6 +116,7 @@ xlabel('driver'); ylabel('year'); zlabel('mpg');
 fprintf('performing neural network model...');
 inputs = data';
 n_nodes = 12;
+n_times = 10;
 targets = mpg';
 nnscript;
 r = corrcoef(net(data')',mpg');
