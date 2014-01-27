@@ -29,6 +29,7 @@ ethanol =       cell2num(A(:,14));
 driver =        cell2num(A(:,15));
 avgMileage =    cell2num(A(:,16));
 beginDate =              A(:,17);
+hybrid =        cell2num(A(:,18));
 fprintf(' done\n');
 
 % compute quantities of interest
@@ -69,10 +70,11 @@ for i=1:length(driver)
 end
 
 % data = [days log(mpd) octane snowtires make model year engineIV enginecyl engineL ethanol...
-%     (driver == 1) (driver == 2) (driver == 3)]; %this with trainbr; 50=3.01, 25=3.16, 12=2.89
+%     (driver == 1) (driver == 2) (driver == 3)]; 
 data = [days log(mpd) octane snowtires year log(carweight) engineIV enginecyl engineL ...
-    ethanol (driver == 1) (driver == 2) (driver == 3)]; %this with trainbr; 50=2.98, 25=2.91, 12=2.71
-%trainlm: 12=3.2557, 25=3.1479, 50=3.1582, 100=2.9688, 200=4.4763
+    ethanol avgMileage hybrid (driver == 1) (driver == 2) (driver == 3)];
+%trainbr; 
+%trainlm:
 %trainscg
 %trainrp
 %traingdx
@@ -80,7 +82,7 @@ data = [days log(mpd) octane snowtires year log(carweight) engineIV enginecyl en
 
 %feedforward,cascadefeedforward,none
 
-%variables; log or not - add hybrid!
+%variables; log or not; date, season/proj.temp
 
 % MLS regression
 fprintf('performing MLS regression...');
