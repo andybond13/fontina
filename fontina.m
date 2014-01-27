@@ -84,15 +84,36 @@ data = [days log(mpd) octane snowtires year log(carweight) engineIV enginecyl en
 
 % MLS regression
 fprintf('performing MLS regression...');
-ds = dataset(mpg,data);
+%ds = dataset(mpg,data);
+[b,bint,r,rint,stats] = regress(mpg,[ones(length(data),1) data]);
+for i=1:length(b)
+    if (bint(i,1)*bint(i,2) < 0 && i > 1)
+        fprintf('*** coefficient %u insignificant!\n',i);
+    end
+end
 fprintf(' done\n');
 fprintf('  R^2 = %f\n',stats(1));
 
 % k-means grouping
-kgroup = kmeans=kmeans(data,4,'replicates',10,'display','final');
+fprintf('performing grouping...');
+kgroup =kmeans(data,4,'replicates',100);
+figure
 andrewsplot(data,'group',kgroup)
+fprintf(' done\n');
+
+% plot in 3d
+figure
+scatter3(driver,year,mpg,10,log(mpd))
+title('MPG - colored by log(mpd)');
+xlabel('driver'); ylabel('year'); zlabel('mpg');
+
+figure
+scatter3(driver,year,mpg,10,kgroup)
+title('MPG - colored by k-group');
+xlabel('driver'); ylabel('year'); zlabel('mpg');
 
 % neural network model
+fprintf('performing neural network model...');
 inputs = data';
 n_nodes = 12;
 targets = mpg';
