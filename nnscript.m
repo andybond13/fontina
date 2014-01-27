@@ -27,8 +27,10 @@ net.TrainFcn = 'trainbr';
 
 % Train the Network
 for i=1:n_times
+    fprintf('\n *training iteration %u ',i);
     [net,tr] = train(net,inputs,targets);
 end
+fprintf('\n');
 
 % Test the Network
 outputs = net(inputs);
