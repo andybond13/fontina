@@ -247,7 +247,7 @@ def main(dir,outfile):
 			if (fill == 1):
 
 				#end trip
-				tripMiles = odometer - beginMiles
+				tripMiles = sum(a.dists)
 				dateobj1 = datetime.datetime.strptime(beginDate,'%m/%d/%Y').date()
 				dateobj2 = datetime.datetime.strptime(date,'%m/%d/%Y').date()
 				tripDate = dateobj2 - dateobj1
@@ -266,6 +266,7 @@ def main(dir,outfile):
 				a.ethanol		= ethanol
 				a.beginDate = beginDate
 				a.hybrid = hybrid
+				a.avgMileage = odometer - 0.5*tripMiles
 				
 				#check and save trip
 				checkTrip(a)
