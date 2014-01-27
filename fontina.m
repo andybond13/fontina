@@ -86,6 +86,7 @@ data = [days log(mpd) octane snowtires year log(carweight) engineIV enginecyl en
 fprintf('performing MLS regression...');
 ds = dataset(mpg,data);
 fprintf(' done\n');
+fprintf('  R^2 = %f\n',stats(1));
 
 % k-means grouping
 kgroup = kmeans=kmeans(data,4,'replicates',10,'display','final');
@@ -96,4 +97,7 @@ inputs = data';
 n_nodes = 12;
 targets = mpg';
 nnscript;
+r = corrcoef(net(data')',mpg');
+fprintf(' done\n');
+fprintf('  R^2 = %f,    performance = %f\n',r(1,2),performance);
 
