@@ -4,12 +4,6 @@
 %
 % This script assumes these variables are defined:
 %
-%   inputs - input data.
-%   mpg - target data.
-
-inputs = inputs';
-targets = targets';
-
 % [P1, PS] = mapminmax(inputs);
 % [T1, TS] = mapminmax(targets);
 % 
