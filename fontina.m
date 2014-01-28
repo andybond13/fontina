@@ -30,6 +30,7 @@ driver =        cell2num(A(:,15));
 avgMileage =    cell2num(A(:,16));
 beginDate =              A(:,17);
 hybrid =        cell2num(A(:,18));
+begin = datenum(beginDate);
 fprintf(' done\n');
 
 % compute quantities of interest
@@ -72,7 +73,7 @@ end
 % data = [days log(mpd) octane snowtires make model year engineIV enginecyl engineL ethanol...
 %     (driver == 1) (driver == 2) (driver == 3)]; 
 data = [days log(mpd) octane snowtires year log(carweight) engineIV enginecyl engineL ...
-    ethanol avgMileage hybrid (driver == 1) (driver == 2) (driver == 3)];
+    ethanol avgMileage hybrid begin (driver == 1) (driver == 2) (driver == 3)];
 %trainbr; 
 %trainlm:
 %trainscg
