@@ -10,6 +10,7 @@ class Trip:
 	dists = []
 	gals = []
 	octs = []
+	eths = []
 	drivers = []
 	tires = []
 	miles		= 0
@@ -40,6 +41,7 @@ class Trip:
 		self.dists[:] = []
 		self.gals[:] = []
 		self.octs[:] = []
+		self.eths[:] = []
 		self.drivers[:] = []
 		self.tires[:] = []
 		self.miles		= 0
@@ -139,6 +141,32 @@ def modelCode(model):
 		print "Unknown model: ", model
 		assert(1 == 0)
 
+def gasTank(model,year):
+	if (model == "Concourse"):
+		return 21.0
+	elif (model == "Vega"):
+		return 16.0
+	elif (model == "Century"):
+		return 15.0
+	elif (model == "Cierra"):
+		return 15.7
+	elif (model == "Sable"):
+		return 16.0
+	elif (model == "Voyager"):
+		return 20.0
+	elif (model == "Highlander"):
+		if (year == 2003):
+			return 19.8
+		elif (year == 2008):
+			return 17.2
+	elif (model == "CRV"):
+		return 15.3
+	elif (model == "Jetta"):
+		return 14.5
+	else:
+		print "Unknown model: ", model
+		assert(1 == 0)
+
 def dateMaker(date):
 	start = 0
 	while date.find("/",start) > -1:
@@ -166,6 +194,9 @@ def checkTrip(a):
 	a.actualGals = sum(i for i in a.gals if i > 0) 
 	a.gallons = sum(a.gals)
 	a.octane = wavg(a.octs,a.gals)
+	print "octane",a.octane
+	a.ethanol = wavg(a.eths,a.gals)
+	print "ethanol",a.ethanol
 	a.snowtires = wavg(a.tires,a.dists)
 	a.driver = sorted(a.drivers)[len(a.drivers)/2]
 	print a.beginDate
@@ -232,17 +263,26 @@ def main(dir,outfile):
 				a = Trip()
 				beginMiles = odometer
 				beginDate = date
+				beginOctane = 87
+				beginEthanol = 0
+				if (year >= 1994):
+					beginEthanol = 1	
 				a.gals.append(gallons)
 			else:
 				#check and add to trip
 				a.dols.append(dollars)
 				a.gals.append(gallons)
 				a.dists.append(odometer - beginMiles)
-				a.octs.append(octaneCode(gastype))
+				a.octs.append(beginOctane)
+				a.eths.append(beginEthanol)
 				a.drivers.append(driverCode(driver))
 				a.tires.append(snowtires)
 				check(fill,gastype,driver,snowtires,ethanol,hybrid)	
 				beginMiles = odometer
+				#update gas contents
+				tank = gasTank(model, year)
+				beginOctane = (gallons * octaneCode(gastype) + (tank - gallons) * beginOctane) / tank
+				beginEthanol = (gallons * ethanol + (tank - gallons) * beginEthanol) / tank 
 				
 			if (fill == 1):
 
@@ -263,7 +303,6 @@ def main(dir,outfile):
 				a.engineIV	= engineIV
 				a.enginecyl	= enginecyl
 				a.engineL		= engineL
-				a.ethanol		= ethanol
 				a.beginDate = beginDate
 				a.hybrid = hybrid
 				a.avgMileage = odometer - 0.5*tripMiles

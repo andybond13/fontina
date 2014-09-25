@@ -38,6 +38,7 @@ mpg = miles ./ gallons;
 price = dollars ./ actualGals;
 mpd = miles ./ days;
 carweight = ones(size(driver));  %curb weight, lbs
+gastank = ones(size(driver));    %gas tank, gals
 for i=1:length(driver)
     switch model(i)
         case 8
@@ -120,7 +121,7 @@ xlabel('driver'); ylabel('year'); zlabel('mpg');
 fprintf('performing neural network model...');
 inputs = data';
 n_nodes = 12;
-n_times = 10;
+n_times = 2;
 targets = mpg';
 nnscript;
 r = corrcoef(net(data')',mpg');
